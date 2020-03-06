@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
+import {GlobalProvider} from './store/GlobalState'
+import styled from 'styled-components'
+import {
+  BrowserRouter as Router, 
+  Switch,
+  Route
+} from 'react-router-dom'
+
+
+
+import Header from './components/Header'
+import Content from './components/Content'
+import RecipePage from './components/RecipePage'
+import Modal from './components/Modal'
+
 import './App.css';
 
 function App() {
+
+  const [isModalOpen, setModal] = useState(false)
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GlobalProvider>
+      <AppWrapper>
+      
+      <Router>
+        <Header />
+        <Switch>
+          <Route exact path='/'>
+            <Content setModal={setModal}/>
+          </Route>
+          <Route path='/recipe/:id'>
+            <RecipePage />
+          </Route>
+        </Switch>
+
+      </Router>
+       
+        
+        {isModalOpen && <Modal setModal={setModal}/>}
+      </AppWrapper>
+    </GlobalProvider>
   );
 }
 
 export default App;
+
+
+const AppWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+
+`
